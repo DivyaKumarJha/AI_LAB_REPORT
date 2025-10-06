@@ -112,18 +112,18 @@ def variableNeighbor(problem, initial_assign, beam_width, max_steps=1000):
             candidates.append((neighbor, neighbor_score))
             steps += 1
             if neighbor_score == len(problem):
-                penetrance = f"{neighbor_score}/{len(problem)}"
-                return neighbor, f"{steps}/{max_steps}", b
+               penetrance = f"{neighbor_score}/{len(problem)}"
+               return neighbor, f"{steps}/{max_steps}", b
 
         candidates.sort(key=lambda x: x[1], reverse=True)
         top_candidates = candidates[:b]
         best_candidate, best_score = top_candidates[0]
 
         if best_score > current_score:
-            current_assign = best_candidate.copy()
-            current_score = best_score
-            b = beam_width
-            if best_score == len(problem):
+               current_assign = best_candidate.copy()
+               current_score = best_score
+               b = beam_width
+               if best_score == len(problem):
                 penetrance = f"{best_score}/{len(problem)}"
                 return current_assign, f"{steps}/{max_steps}", b
         else:
@@ -134,6 +134,8 @@ def variableNeighbor(problem, initial_assign, beam_width, max_steps=1000):
 
 # ---------------- New Heuristic: Simulated Annealing ----------------
 # Heuristic 1: Maximize satisfied clauses
+
+
 def simulatedAnnealing(problem, initial_assign, max_steps=1000, initial_temp=100, cooling_rate=0.95):
     current_assign = initial_assign.copy()
     current_score = solve(problem, current_assign)
@@ -143,16 +145,21 @@ def simulatedAnnealing(problem, initial_assign, max_steps=1000, initial_temp=100
     temp = initial_temp
 
     for step in range(1, max_steps + 1):
+         
+         
         steps += 1
         neighbor = current_assign.copy()
+        
         var = random.choice(list(neighbor.keys()))
+        
         neighbor[var] = abs(neighbor[var] - 1)
+        
         neighbor_score = solve(problem, neighbor)
 
         if neighbor_score > current_score or random.random() < math.exp((neighbor_score - current_score) / temp):
-            current_assign = neighbor.copy()
-            current_score = neighbor_score
-            if current_score > best_score:
+               current_assign = neighbor.copy()
+               current_score = neighbor_score
+               if current_score > best_score:
                 best_assign = current_assign.copy()
                 best_score = current_score
 
@@ -164,7 +171,9 @@ def simulatedAnnealing(problem, initial_assign, max_steps=1000, initial_temp=100
     return best_assign, f"{steps}/{max_steps}"
 
 # Heuristic 2: Minimize unsatisfied clauses
+
 def simulatedAnnealing2(problem, initial_assign, max_steps=1000, initial_temp=100, cooling_rate=0.95):
+     
     current_assign = initial_assign.copy()
     current_score = len(problem) - solve(problem, current_assign)  # unsatisfied clauses
     best_assign = current_assign.copy()
@@ -172,19 +181,25 @@ def simulatedAnnealing2(problem, initial_assign, max_steps=1000, initial_temp=10
     steps = 0
     temp = initial_temp
 
+
     for step in range(1, max_steps + 1):
+         
         steps += 1
+        
         neighbor = current_assign.copy()
+        
         var = random.choice(list(neighbor.keys()))
+        
         neighbor[var] = abs(neighbor[var] - 1)
+        
         neighbor_score = len(problem) - solve(problem, neighbor)
 
         if neighbor_score < current_score or random.random() < math.exp((current_score - neighbor_score) / temp):
-            current_assign = neighbor.copy()
-            current_score = neighbor_score
-            if current_score < best_score:
-                best_assign = current_assign.copy()
-                best_score = current_score
+               current_assign = neighbor.copy()
+               current_score = neighbor_score
+               if current_score < best_score:
+                    best_assign = current_assign.copy()
+                    best_score = current_score
 
         temp *= cooling_rate
         if best_score == 0:
@@ -193,9 +208,8 @@ def simulatedAnnealing2(problem, initial_assign, max_steps=1000, initial_temp=10
     penetrance = f"{len(problem) - best_score}/{len(problem)}"
     return best_assign, f"{steps}/{max_steps}"
 
-# ---------------------------------------------------------------------
 
-# Main Execution
+# Main Execution///////////////////////////
 hAssigns = []
 assigns = []
 h_n = []
@@ -213,6 +227,8 @@ sim2_penetration = []
 s2Assigns = []
 
 i = 0
+
+
 
 for problem in problems:
     i += 1
